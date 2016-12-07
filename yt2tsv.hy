@@ -1,10 +1,10 @@
 #!/usr/bin/env hy
 
-(import [apiclient.discovery [build]])
-(import [apiclient.errors [HttpError]])
-(import [oauth2client.tools [argparser]])
-(import re)
-(import codecs)
+(import re
+        codecs
+        [apiclient.discovery [build]]
+        [apiclient.errors [HttpError]]
+        [oauth2client.tools [argparser]])
 
 (setv DEVELOPER-KEY "")
 (setv SERVICE-NAME "youtube")
@@ -40,7 +40,7 @@
          (.write (.join "\n" videos))
          (.close)))))
 
-(when (= __name__ "__main__")
+(defmain [&rest args]
   (argparser.add_argument "--id")
   (argparser.add_argument "--output")
   (setv args (argparser.parse_args))
