@@ -6,33 +6,32 @@ I wanted to write something in Hylang because straight Python is not my thing.
 
 * Install
 
-1. Get yt2tsv and cd into it
+** Get yt2tsv and cd into it
 #+begin_src sh
 git clone https://github.com/bandresen/yt2tsv.git
 cd yt2tsv
 #+end_src
 
-2. Create and activate [[http://docs.hylang.org/en/latest/quickstart.html][Hylang virtual environment]]
+** Create and activate [[http://docs.hylang.org/en/latest/quickstart.html][Hylang virtual environment]]
 #+begin_src sh
 virtualenv hy # maybe called virtualenv2 YMMV
 source hy/bin/activate
 pip install git+https://github.com/hylang/hy.git
 #+end_src
 
-3. Get dependency
+** Get dependency
 #+begin_src sh
 pip install google-api-python-client
 #+end_src
 
-4. Get YouTube Data API v3 access and edit yt2tsv.hy to set =DEVELOPER-KEY=
+** Get YouTube Data API v3 access and edit yt2tsv.hy to set =DEVELOPER-KEY=
 
-4.1 https://developers.google.com/youtube/v3/getting-started
+*** https://developers.google.com/youtube/v3/getting-started
 
-5. Run it with --id (comma-separated list) and --output (filename, STDOUT by default)
+** Run it with --id (comma-separated list) and --output (filename, STDOUT by default)
 #+begin_src sh
 ./yt2tsv.hy --id W2Wnvvj33Wo --output thelastofuspart2.tsv
 #+end_src
-
 
 * Missing features and limitations
 =--input= that accepts a file with a list of youtube links without having to manually give the --id
