@@ -35,4 +35,5 @@ pip install google-api-python-client
 
 * Missing features and limitations
 =--input= that accepts a file with a list of youtube links without having to manually give the --id
+
 =--id= has an unknown limit, higher than 30 lower than 60. (I guess 50 as that is a standard Google API maxResults limitation.)

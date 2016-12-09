@@ -6,7 +6,7 @@
         [apiclient.errors [HttpError]]
         [oauth2client.tools [argparser]])
 
-(setv DEVELOPER-KEY "")
+(setv DEVELOPER-KEY (-> (open "key") .read .strip))
 (setv SERVICE-NAME "youtube")
 (setv API-VERSION "v3")
 
@@ -35,15 +35,15 @@
   (if stdout
     (print header (.join "\n" videos))
     (do
-     (-> (.open codecs options.output "w" "utf-8")
-         (.write header)
-         (.write (.join "\n" videos))
-         (.close)))))
+     (setv file (.open codecs options.output "w" "utf-8"))
+     (.write file header)
+     (.write file (.join "\n" videos))
+     (.close file))))
 
 (defmain [&rest args]
-  (argparser.add_argument "--id")
-  (argparser.add_argument "--output")
-  (setv args (argparser.parse_args))
+  (argparser.add-argument "--id" :required true)
+  (argparser.add-argument "--output" :default "-")
+  (setv args (argparser.parse-args))
   (try
    (youtube-search args)
    (except [e HttpError]
