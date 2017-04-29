@@ -12,14 +12,14 @@
 (setv HEADERS ["Video URL" "Title" "Channel URL" "Channel" "Views" "Likes" "Dislikes"])
 
 (defn youtube-api-get [item value]
-  (let [s (.split value ":")]
-    (-> (if (= (len s) 1)
-          (-> item (get (car s)))
-          (-> item
-              (get (car s))
-              (get (last s))))
-        (.encode "utf8"))))
-(defreader ^ [expr] `(youtube-api-get item ~@expr))
+  (setv s (.split value ":"))
+  (-> (if (= (len s) 1)
+        (-> item (get (first s)))
+        (-> item
+            (get (first s))
+            (get (last s))))))
+
+(defsharp ^ [expr] `(youtube-api-get item ~@expr))
 
 (defn youtube-extract [item]
   {"Video URL" (+ "https://youtu.be/" #^("id"))
@@ -31,19 +31,19 @@
    "Dislikes" #^("statistics:dislikeCount")})
 
 (defn youtube-get [ids]
-  (let [youtube (build SERVICE-NAME API-VERSION
-                       :developerKey DEVELOPER-KEY)
-        items []
-        chunked (list (partition ids 30 :fillvalue None))]
-    (for [chunk chunked]
-      (do
-       (setv chunk-ids (.join "," (list (take-while string? chunk))))
-       (setv response (-> (.videos youtube)
-                          (.list :id chunk-ids :part "snippet,statistics")
-                          (.execute)))
-       (for [result (.get response "items")]
-         (.append items (youtube-extract result)))))
-    items))
+  (setv youtube (build SERVICE-NAME API-VERSION
+                       :developerKey DEVELOPER-KEY))
+  (setv items [])
+  (setv chunked (list (partition ids 30 :fillvalue None)))
+  (for [chunk chunked]
+    (do
+     (setv chunk-ids (.join "," (list (take-while string? chunk))))
+     (setv response (-> (.videos youtube)
+                        (.list :id chunk-ids :part "snippet,statistics")
+                        (.execute)))
+     (for [result (.get response "items")]
+       (.append items (youtube-extract result)))))
+  items)
 
 (defn get-and-convert-to-csv [options]
   (unless (or options.id
@@ -66,7 +66,7 @@
 (defn url-to-video-id [line]
   (setv pattern (re.compile r"(?:https?:\/\/)?(?:[0-9A-Z-]+\.)?(?:youtube|youtu|youtube-nocookie)\.(?:com|be)\/(?:watch\?v=|watch\?.+&v=|embed\/|v\/|.+\?v=)?([^&=\n%\?]{11})" re.IGNORECASE))
   (try
-   (-> (re.search pattern line) .groups car)
+   (-> (re.search pattern line) .groups first)
    (except [e AttributeError] "")))
 
 (defn file-to-ids [input-file]
