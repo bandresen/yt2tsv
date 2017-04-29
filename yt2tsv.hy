@@ -46,14 +46,15 @@
   items)
 
 (defn get-and-convert-to-csv [options]
-  (unless (or options.id
-              (and options.input (os.path.isfile options.input)))
+  (unless (or options.ids options.input)
     (sys.exit "No valid input"))
+  (if options.input (unless (os.path.isfile options.input)
+                      (sys.exit (+ "Not a file: " options.input))))
 
   (setv videos (youtube-get
-                (if (os.path.isfile options.input)
-                  (file-to-ids options.input)
-                  (or (.split options.id ",") None))))
+                (if options.ids
+                  (.split options.ids ",")
+                  (file-to-ids options.input))))
 
   (with [csv-file (open options.output "w")]
         (setv writer (csv.DictWriter csv-file
@@ -78,12 +79,12 @@
   ids)
 
 (defmain [&rest args]
-  (argparser.add-argument "--id")
+  (argparser.add-argument "--ids")
   (argparser.add-argument "--input")
   (argparser.add-argument "--output" :default "output.tsv")
   (setv args (argparser.parse-args))
-  (unless (or args.input args.id)
-    (argparser.error "either --id or --input required"))
+  (unless (or args.input args.ids)
+    (argparser.error "either --ids or --input required"))
   (try
    (get-and-convert-to-csv args)
    (except [e HttpError]

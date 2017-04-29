@@ -28,9 +28,9 @@ pip install google-api-python-client
 
 *** https://developers.google.com/youtube/v3/getting-started
 
-** Run it with --id (comma-separated list) and --output (filename, STDOUT by default)
+** Run it with --ids (comma-separated list) and --output (filename, "output.tsv" by default)
 #+begin_src sh
-./yt2tsv.hy --id W2Wnvvj33Wo --output thelastofuspart2.tsv
+./yt2tsv.hy --ids W2Wnvvj33Wo --output thelastofuspart2.tsv
 #+end_src
 
 * Missing features and limitations
