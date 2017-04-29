@@ -1,1 +1,6 @@
 /hy/
+*.pyc
+/env/
+/input.txt
+/key
+*.ods
